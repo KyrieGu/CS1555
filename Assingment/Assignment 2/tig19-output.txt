@@ -1,0 +1,67 @@
+Assignment 2
+TIG19
+Tianrun Gu	4166209
+
+---------------------------------------------------------------
+
+Incorrect Insertion:
+
+INSERT INTO ROAD VALUES (1, 'FORBES', 300.0);
+
+Output:
+sql> INSERT INTO ROAD VALUES (1, 'FORBES', 300.0)
+[2019-09-18 12:15:47] [23505] ERROR: duplicate key value violates unique constraint "road_pk"
+[2019-09-18 12:15:47] Detail: Key (road_no)=(1) already exists.
+
+---------------------------------------------------------------
+
+Incorrect Insertion:
+
+INSERT INTO WORKER VALUES (NULL,NULL,34,6);
+
+Output:
+sql> INSERT INTO WORKER VALUES (NULL,NULL,34,6)
+[2019-09-18 12:17:57] [23502] ERROR: null value in column "ssn" violates not-null constraint
+[2019-09-18 12:17:57] Detail: Failing row contains (null, null, 34, 6).
+
+---------------------------------------------------------------
+
+Incorrect Insertion:
+
+INSERT INTO STATE VALUES ('OhioForTest', 'OH', 45000.0, 1200000);
+
+Output:
+sql> INSERT INTO STATE VALUES ('OhioForTest', 'OH', 45000.0, 1200000)
+[2019-09-18 19:52:11] [23505] ERROR: duplicate key value violates unique constraint "state_pk"
+[2019-09-18 19:52:11] Detail: Key (abbreviation)=(OH) already exists.
+
+---------------------------------------------------------------
+Incorrect Insertion:
+
+INSERT INTO COVERAGE VALUES (3, 'PA', 0.4, 16000.0);
+
+Output:
+sql> INSERT INTO COVERAGE VALUES (3, 'PA', 0.4, 16000.0)
+[2019-09-18 19:52:47] [23503] ERROR: insert or update on table "coverage" violates foreign key constraint "coverage_fk"
+[2019-09-18 19:52:47] Detail: Key (forest_no)=(3) is not present in table "forest".
+
+Incorrect Insertion:
+
+INSERT INTO SENSOR VALUES (6, 60.0, 60.0, '01-JAN-2019 10:00:00', 40, 121212122);
+
+Output:
+sql> INSERT INTO SENSOR VALUES (6, 60.0, 60.0, '01-JAN-2019 10:00:00', 40, 121212122)
+[2019-09-18 19:57:18] [23503] ERROR: insert or update on table "sensor" violates foreign key constraint "sensor_fk"
+[2019-09-18 19:57:18] Detail: Key (maintainer)=(121212122) is not present in table "worker".
+
+
+---------------------------------------------------------------
+Incorrect Insertion:
+
+INSERT INTO FOREST values (2, 'Pennsylvania Forest2', 10000.0, -1, 21.0, 100.0, 35.0, 78.0);
+
+Output:
+sql> INSERT INTO FOREST values (2, 'Pennsylvania Forest2', 10000.0, -1, 21.0, 100.0, 35.0, 78.0)
+[2019-09-18 19:54:38] [23514] ERROR: new row for relation "forest" violates check constraint "acid_level_value"
+[2019-09-18 19:54:38] Detail: Failing row contains (2, Pennsylvania Forest2, 10000, -1, 21, 100, 35, 78).
+

@@ -1,0 +1,66 @@
+P.S. sample data is just a sample, your SQL statement should work for any data.
+
+table FOREST
+FOREST-NO  NAME                      AREA       ACID_LEVEL MBR_XMIN  MBR_XMAX   MBR_YMIN    MBR_YMAX
+---------- ------------------------- ---------- ---------  --------- ---------- ----------- ----------
+1          Allegheny National Forest 40000.0      0.3        134.0     550.0      233.0       598.0
+2          Pennsylvania Forest       10000.0      0.75       21.0      100.0      35.0        78.0
+
+table STATE
+NAME         ABBREVIATION     AREA        POPULATION
+----------   --------------- ----------- ------------------
+Pennsylvania PA              50000.0     1400000
+Ohio         OH              45000.0     1200000
+
+table COVERAGE
+Forest_No  State        Percentage Area
+---------- -----------  ---------- ----------
+1          PA           0.4        16000.0
+1          OH           0.6        24000.0
+2          PA	         1          10000.0
+
+table ROAD
+ROAD_NO    NAME       LENGTH
+---------- ---------- ----------
+1          FORBES     500.0
+2          BIGELOW    300.0
+
+
+table INTERSECTION
+FOREST_NO            ROAD_NO
+-------------------- ------------
+1                    1
+1                    2
+2                    1
+2                    2
+
+
+table SENSOR
+SENSOR_ID  X         Y          LAST_CHARGED            ENERGY    MAINTAINER
+---------- --------- ---------- ----------------------- --------- -----------
+1          150.0     300.0      01-JAN-2019 10:00:00    20        123456789
+2          200.0     400.0      01-JAN-2019 10:00:00    30        123456789
+3           50.0      50.0      01-JAN-2019 10:00:00    30        121212121
+4           50.0      15.0      01-JAN-2019 10:00:00    30        NULL
+5           60.0      60.0      01-JAN-2019 10:00:00    40        121212121
+
+
+table REPORT
+SENSOR_ID  TEMPERATURE REPORT_TIME
+---------- ----------- -------------------------
+1          55          10-JAN-2019 09:00:00
+1          57          10-JAN-2019 14:00:00
+1          40          10-JAN-2019 20:00:00
+2          58          10-JAN-2019 12:30:00
+2          59          10-JAN-2019 13:00:00
+3          50          10-JAN-2019 12:30:00
+4          30          01-JAN-2019 22:00:00
+5          33          02-JAN-2019 22:00:00
+5          32          02-JAN-2019 22:30:00
+
+
+table WORKER
+SSN        NAME        AGE         RANK
+---------- ----------- ----------- -------------
+123456789  John        22          3
+121212121  Jason       30          5
