@@ -1,0 +1,59 @@
+Student: Tianrun Gu
+Pitt: tig19
+
+Output:
+a.
+Pennsylvania Forest
+
+b.
+Pennsylvania Forest
+
+C.
+FORBES
+BIGELOW
+
+D.
+1	John
+2	John
+3	John
+4	John
+5	John
+1	John
+2	John
+3	John
+4	John
+5	John
+1	Jason
+2	Jason
+3	Jason
+4	Jason
+5	Jason
+1	
+2	
+3	
+4	
+5	
+1	Jason
+2	Jason
+3	Jason
+4	Jason
+5	Jason
+
+e.
+OH	PA
+
+f.
+53.8	5
+38.333333333333336	3
+
+g.
+200	400
+
+h.
+Ohio	0.5333333333333333
+Pennsylvania	0.52
+
+J.
+Pennsylvania Forest
+
+

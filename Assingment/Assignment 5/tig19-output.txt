@@ -1,0 +1,34 @@
+UPDATE 3
+UPDATE 1
+CREATE VIEW
+ sensor_id 
+-----------
+         1
+         5
+         2
+(3 rows)
+
+ sensor_id 
+-----------
+         3
+         4
+(2 rows)
+
+DROP VIEW
+REFRESH MATERIALIZED VIEW
+ name 
+------
+ John
+(1 row)
+
+           name            
+---------------------------
+ Pennsylvania Forest
+ Allegheny National Forest
+(2 rows)
+
+ name 
+------
+ John
+(1 row)
+

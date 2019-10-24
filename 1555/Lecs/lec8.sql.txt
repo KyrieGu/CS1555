@@ -1,0 +1,6 @@
+set transaction read write;
+select *
+from Student;
+insert into Student
+values (777, 'Jane', 2, 'CS');
+Commit;

@@ -1,0 +1,311 @@
+Tianrun Gu
+tig19@Pitt.edu
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> set serveroutput on
+SQL> create or replace procedure pro_Update_Last_Read (input_sensor_id int, read_time timestamp)
+as
+    begin
+        update SENSOR
+        set Last_Read = read_time
+        where Sensor_Id = input_sensor_id;
+    end;
+/  2    3    4    5    6    7    8
+
+Procedure created.
+
+SQL> create or replace function fun_Compute_Percentage(input_forest_no varchar2, area_covered float) return float as
+        result float;
+    begin
+        select area_covered/area into result
+        from Forest where forest_no = input_forest_no;
+        if result >= 1 then
+            return 1.0;
+        end if;
+        return result;
+    end;
+/  2    3    4    5    6    7    8    9   10   11
+
+Function created.
+
+SQL>
+SQL> create trigger tri_Last_Read after insert on Report
+    for each row
+begin
+    pro_Update_Last_Read(:new.SENSOR_ID, :new.REPORT_TIME);
+end;
+/  2    3    4    5    6
+
+Trigger created.
+
+SQL> create or replace trigger tri_Percentage before update on Coverage
+    for each row
+    begin
+        :new.percentage := fun_Compute_Percentage(:new.FOREST_NO, :new.AREA);
+    end;
+/  2    3    4    5    6
+
+Trigger created.
+
+SQL> create or replace function fun_Emergency(input_temperature float) return int as
+    begin
+        if input_temperature > 100 then return 1;
+        end if;
+        return 0;
+    end;
+/
+  2    3    4    5    6    7
+Function created.
+
+SQL>
+SQL> create or replace trigger tri_Emergency after insert on Report
+    for each row
+    begin
+        if fun_Emergency(:new.TEMPERATURE) = 1
+            then insert into EMERGENCY values (:new.Sensor_Id, :new.Report_Time);
+        end if;
+    end;
+/
+  2    3    4    5    6    7    8
+Trigger created.
+
+SQL>
+SQL> select * from SENSOR;
+
+ SENSOR_ID	    X	       Y
+---------- ---------- ----------
+LAST_CHARGED
+---------------------------------------------------------------------------
+LAST_READ
+---------------------------------------------------------------------------
+    ENERGY MAINTAINE
+---------- ---------
+	 1	  150	     300
+01-JAN-19 10.00.00.000000 AM
+01-JAN-19 10.00.00.000000 AM
+	20 123456789
+
+
+ SENSOR_ID	    X	       Y
+---------- ---------- ----------
+LAST_CHARGED
+---------------------------------------------------------------------------
+LAST_READ
+---------------------------------------------------------------------------
+    ENERGY MAINTAINE
+---------- ---------
+	 2	  200	     400
+01-JAN-19 10.00.00.000000 AM
+01-JAN-19 10.00.00.000000 AM
+	30 123456789
+
+
+ SENSOR_ID	    X	       Y
+---------- ---------- ----------
+LAST_CHARGED
+---------------------------------------------------------------------------
+LAST_READ
+---------------------------------------------------------------------------
+    ENERGY MAINTAINE
+---------- ---------
+	 3	   50	      50
+01-JAN-19 10.00.00.000000 AM
+01-JAN-19 10.00.00.000000 AM
+	30 121212121
+
+
+ SENSOR_ID	    X	       Y
+---------- ---------- ----------
+LAST_CHARGED
+---------------------------------------------------------------------------
+LAST_READ
+---------------------------------------------------------------------------
+    ENERGY MAINTAINE
+---------- ---------
+	 4	   50	      15
+01-JAN-19 10.00.00.000000 AM
+01-JAN-19 10.00.00.000000 AM
+	30
+
+
+ SENSOR_ID	    X	       Y
+---------- ---------- ----------
+LAST_CHARGED
+---------------------------------------------------------------------------
+LAST_READ
+---------------------------------------------------------------------------
+    ENERGY MAINTAINE
+---------- ---------
+	 5	   60	      60
+01-JAN-19 10.00.00.000000 AM
+01-JAN-19 10.00.00.000000 AM
+	40 121212121
+
+
+SQL> INSERT INTO REPORT
+VALUES (1, 88, to_timestamp('11-JAN-2019 09:00:00', 'DD-MON-YYYY HH24:MI:SS'));  2
+
+1 row created.
+
+SQL> select * from SENSOR;
+
+ SENSOR_ID	    X	       Y
+---------- ---------- ----------
+LAST_CHARGED
+---------------------------------------------------------------------------
+LAST_READ
+---------------------------------------------------------------------------
+    ENERGY MAINTAINE
+---------- ---------
+	 1	  150	     300
+01-JAN-19 10.00.00.000000 AM
+11-JAN-19 09.00.00.000000 AM
+	20 123456789
+
+
+ SENSOR_ID	    X	       Y
+---------- ---------- ----------
+LAST_CHARGED
+---------------------------------------------------------------------------
+LAST_READ
+---------------------------------------------------------------------------
+    ENERGY MAINTAINE
+---------- ---------
+	 2	  200	     400
+01-JAN-19 10.00.00.000000 AM
+01-JAN-19 10.00.00.000000 AM
+	30 123456789
+
+
+ SENSOR_ID	    X	       Y
+---------- ---------- ----------
+LAST_CHARGED
+---------------------------------------------------------------------------
+LAST_READ
+---------------------------------------------------------------------------
+    ENERGY MAINTAINE
+---------- ---------
+	 3	   50	      50
+01-JAN-19 10.00.00.000000 AM
+01-JAN-19 10.00.00.000000 AM
+	30 121212121
+
+
+ SENSOR_ID	    X	       Y
+---------- ---------- ----------
+LAST_CHARGED
+---------------------------------------------------------------------------
+LAST_READ
+---------------------------------------------------------------------------
+    ENERGY MAINTAINE
+---------- ---------
+	 4	   50	      15
+01-JAN-19 10.00.00.000000 AM
+01-JAN-19 10.00.00.000000 AM
+	30
+
+
+ SENSOR_ID	    X	       Y
+---------- ---------- ----------
+LAST_CHARGED
+---------------------------------------------------------------------------
+LAST_READ
+---------------------------------------------------------------------------
+    ENERGY MAINTAINE
+---------- ---------
+	 5	   60	      60
+01-JAN-19 10.00.00.000000 AM
+01-JAN-19 10.00.00.000000 AM
+	40 121212121
+
+
+SQL> select * from COVERAGE;
+
+FOREST_NO  ST PERCENTAGE       AREA
+---------- -- ---------- ----------
+1	   PA	      .4      16000
+1	   OH	      .6      24000
+2	   PA	       1      10000
+
+SQL> update coverage
+set area = 40000.0
+where forest_no = '1' and state = 'PA';  2    3
+
+1 row updated.
+
+SQL> select * from COVERAGE;
+
+FOREST_NO  ST PERCENTAGE       AREA
+---------- -- ---------- ----------
+1	   PA	       1      40000
+1	   OH	      .6      24000
+2	   PA	       1      10000
+
+SQL> select * from EMERGENCY;
+
+no rows selected
+
+SQL> INSERT INTO REPORT
+VALUES (1, 111, to_timestamp('12-JAN-2019 09:00:00', 'DD-MON-YYYY HH24:MI:SS'));  2
+
+1 row created.
+
+SQL> select * from EMERGENCY;
+
+ SENSOR_ID
+----------
+REPORT_TIME
+---------------------------------------------------------------------------
+	 1
+12-JAN-19 09.00.00.000000 AM
+
+
+SQL> create or replace procedure List_Names(dummy int)
+as
+        CURSOR cur is select * from FOREST;
+        names_list forest%rowtype;
+    begin
+        if not cur%isopen
+        then
+          open cur;
+        end if;
+        loop
+            fetch cur into names_list;
+            exit when cur%notfound;
+            DBMS_OUTPUT.PUT_LINE(names_list.NAME);
+        end loop;
+        close cur;
+    end;
+/  2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17
+
+Procedure created.
+
+SQL> call List_Names(1);
+Allegheny National Forest
+Pennsylvania Forest
+
+Call completed.
+
+SQL> create or replace procedure List_Names_I(dummy int)
+as
+        list forest%rowtype;
+    begin
+        for list in (select * from FOREST) loop
+            DBMS_OUTPUT.PUT_LINE(list.NAME);
+        end loop;
+
+    end;
+/  2    3    4    5    6    7    8    9   10
+
+Procedure created.
+
+SQL> call List_Names_I(1);
+Allegheny National Forest
+Pennsylvania Forest
+
+Call completed.
+
+SQL>

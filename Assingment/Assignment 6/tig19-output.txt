@@ -1,0 +1,128 @@
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP DOMAIN
+COMMIT
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+COMMIT
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE DOMAIN
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+COMMIT
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+COMMIT
+CREATE PROCEDURE
+COMMIT
+CREATE FUNCTION
+COMMIT
+CREATE FUNCTION
+DROP TRIGGER
+CREATE TRIGGER
+COMMIT
+CREATE FUNCTION
+DROP TRIGGER
+CREATE TRIGGER
+COMMIT
+DROP FUNCTION
+CREATE FUNCTION
+DROP TRIGGER
+CREATE TRIGGER
+COMMIT
+ sensor_id |  x  |  y  |    last_charged     |      last_read      | energy | maintainer 
+-----------+-----+-----+---------------------+---------------------+--------+------------
+         1 | 150 | 300 | 2019-01-01 10:00:00 | 2019-01-01 10:00:00 |     20 | 123456789
+         2 | 200 | 400 | 2019-01-01 10:00:00 | 2019-01-01 10:00:00 |     30 | 123456789
+         3 |  50 |  50 | 2019-01-01 10:00:00 | 2019-01-01 10:00:00 |     30 | 121212121
+         4 |  50 |  15 | 2019-01-01 10:00:00 | 2019-01-01 10:00:00 |     30 | 
+         5 |  60 |  60 | 2019-01-01 10:00:00 | 2019-01-01 10:00:00 |     40 | 121212121
+(5 rows)
+
+INSERT 0 1
+ sensor_id |  x  |  y  |    last_charged     |      last_read      | energy | maintainer 
+-----------+-----+-----+---------------------+---------------------+--------+------------
+         2 | 200 | 400 | 2019-01-01 10:00:00 | 2019-01-01 10:00:00 |     30 | 123456789
+         3 |  50 |  50 | 2019-01-01 10:00:00 | 2019-01-01 10:00:00 |     30 | 121212121
+         4 |  50 |  15 | 2019-01-01 10:00:00 | 2019-01-01 10:00:00 |     30 | 
+         5 |  60 |  60 | 2019-01-01 10:00:00 | 2019-01-01 10:00:00 |     40 | 121212121
+         1 | 150 | 300 | 2019-01-01 10:00:00 | 2019-01-11 09:00:00 |     20 | 123456789
+(5 rows)
+
+ forest_no | state | percentage | area  
+-----------+-------+------------+-------
+ 1         | PA    |        0.4 | 16000
+ 1         | OH    |        0.6 | 24000
+ 2         | PA    |          1 | 10000
+(3 rows)
+
+UPDATE 1
+ forest_no | state | percentage | area  
+-----------+-------+------------+-------
+ 2         | PA    |          1 | 10000
+ 1         | PA    |          1 | 40000
+ 1         | OH    |        0.6 | 24000
+(3 rows)
+
+ sensor_id | report_time 
+-----------+-------------
+(0 rows)
+
+INSERT 0 1
+ sensor_id |     report_time     
+-----------+---------------------
+         1 | 2019-01-12 09:00:00
+(1 row)
+
+CREATE PROCEDURE
+CALL
+CREATE PROCEDURE
+CALL

@@ -1,0 +1,26 @@
+Assumptions:
+-	A customer has at least 1 car and can have multiple cars
+-	A car is owned by 1 customer and only 1 customer
+-	A Policy can cover multiple cars, but a car can only be covered by one policy, and all cars are covered.
+-	A customer can have multiple policies and a policies can also be signed by multiple customers, and a customer has at least one policy and a policy were signed by at least one customer
+-	A claim is made based on the car and a customer (car owner), a claim must be filled by a customer and with a car, but there can be customers/cars that never make any claim.
+Entities:
+-	CUSTOMER(SSN, First, MI, Last)
+-	CAR(VIN, color, make, model, year)
+-	POLICY(ID, CurrExpDate, StartingDate, Deductible)
+-	CLAIM(Date, AmountOfDamage) – Weak entity
+Relationships:
+-	Insure<CAR, CUSTOMER> 1:M total/total
+-	Cover<POLICY, CAR> 1:M total/total
+-	OWN<CUSTOMER, POLICY> M:N total/total
+-	CREATE<CUSTOMER,CLAIM,CAR> 1:M:N partial/total/partial
+Schemas:
+-	CUSTOMER<SSN, First, MI, Last>
+-	CAR<VIN, SSN, color, make, model, year>
+	o	FK(SSN) -> CUSTOMER(SSN)
+-	POLICY<ID, VIN, SSN, CurrExpDate, StaringDate, Deductible>
+	o	FK(VIN)-> CAR(VIN)
+	o	FK(SSN) -> CUSTOMER(SSN)
+-	CLAIM<Date, AmountOfDamage, SSN, VIN>
+	o	FK(VIN) -> CAR(VIN)
+	o	FK(SSN) -> CUSTOMER(SSN)

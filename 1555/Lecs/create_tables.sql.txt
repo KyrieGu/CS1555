@@ -1,0 +1,27 @@
+create table if not exists cs1555.student
+(
+	sid serial not null
+		constraint students_pk
+			primary key,
+	name varchar(150),
+	class integer,
+	major varchar(10)
+);
+
+alter table cs1555.student owner to postgres;
+
+create unique index if not exists students_sid_uindex
+	on cs1555.student (sid);
+
+create table if not exists cs1555.enroll
+(
+	sid integer not null,
+	cid varchar(50) not null,
+	term varchar(50),
+	grade double precision,
+	constraint enroll_pk
+		primary key (sid, cid)
+);
+
+alter table cs1555.enroll owner to postgres;
+

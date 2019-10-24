@@ -1,0 +1,90 @@
+----CS1555/2055 - DATABASE MANAGEMENT SYSTEMS (FALL 2019)
+----DEPT. OF COMPUTER SCIENCE, UNIVERSITY OF PITTSBURGH
+----ASSIGNMENT #5: SQL TRANSACTIONS AND SQL VIEWS - SAMPLE SOLUTION
+
+-------------------------------------------------
+--Question 3
+-------------------------------------------------
+--Q3.a: Find the top 3 sensors that have issued the highest amount of reports.
+
+select Sensor_Id
+from report
+group by Sensor_Id
+order by count(*) desc
+limit 3;
+
+--Q3.b: Find the next 2 sensors after the top 3 sensors that have issued the highest amount of reports.
+
+select Sensor_Id
+from report
+group by Sensor_Id
+order by count(*) desc
+limit 2 offset 3;
+
+-------------------------------------------------
+--Question 4
+------------------------------------------------
+
+--Q4.a: A view named DUTIES that counts, for each worker, the total number of sensors that are maintained by him/her.
+
+CREATE OR REPLACE VIEW DUTIES AS
+SELECT Maintainer, COUNT(*) as Total
+FROM SENSOR
+GROUP BY Maintainer;
+
+--Q4.b: A materialized view named DUTIES_MV that corresponds to the DUTIES view.
+
+DROP materialized VIEW if exists DUTIES_MV;
+commit;
+CREATE MATERIALIZED VIEW DUTIES_MV
+AS
+select *
+from DUTIES;
+
+--Q4.c: A view named FOREST_SENSOR that lists all forests along with its sensors (Forest_no, Name, Sensor_Id).
+
+CREATE OR REPLACE VIEW FOREST_SENSOR AS
+SELECT forest_no, Name, Sensor_Id
+FROM FOREST
+         JOIN SENSOR
+              ON (X between MBR_XMin and MBR_XMax) and (Y between MBR_YMin and MBR_YMax);
+
+
+-------------------------------------------------
+--Question 5
+------------------------------------------------
+
+--Q5.a: Find the names of the workers who maintain the maximum number of sensors.
+
+SELECT Maintainer, total
+FROM DUTIES
+WHERE total = (
+    SELECT total
+    from DUTIES
+    order by total desc
+    limit 1
+);
+
+--Q5.b: Find the names of all forests such that no sensors in those forests reported anything
+--between 10-AUG-2019 00:00:00 and 11-AUG-2019 00:00:00.
+
+SELECT distinct Name
+FROM FOREST_SENSOR
+WHERE NOT EXISTS(SELECT Sensor_ID
+                 FROM FOREST_SENSOR
+                          natural join REPORT
+                 WHERE (Report_Time between '2019-08-10 00:00:00' and '2019-08-11 00:00:00'));
+
+
+--Q5.c: If you have used DUTIES (or DUTIES_MV) in any of the above queries, then write a second query SQL using DUTIES_MV (or DUTIES).
+
+SELECT Maintainer, total
+FROM DUTIES_MV
+WHERE total = (
+    SELECT total
+    from DUTIES_MV
+    order by total desc
+    limit 1
+);
+
+--Q5.d: Compare and report the differences between views and materialized views in term of execution time.
