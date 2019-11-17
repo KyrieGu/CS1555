@@ -1,0 +1,160 @@
+----CS1555/2055 - DATABASE MANAGEMENT SYSTEMS (FALL 2019)
+----DEPT. OF COMPUTER SCIENCE, UNIVERSITY OF PITTSBURGH
+----ASSIGNMENT #6: SQL/PL: FUNCTIONS, PROCEDURES, AND TRIGGERS - SAMPLE SOLUTION
+
+----------------------------------------------------------
+--Question 1 Procedure & Function
+----------------------------------------------------------
+--Q1a)
+
+CREATE OR REPLACE PROCEDURE proc_Update_Last_Read(input_sensor_id in int, read_time in timestamp)
+AS
+BEGIN
+    update Sensor
+    set Last_Read = read_time
+    where Sensor.sensor_id = input_sensor_id;
+END;
+/
+
+------------------------------
+--Q1b)
+
+CREATE OR REPLACE FUNCTION fun_compute_percentage(input_forest_no in varchar2, area_covered in float) RETURN float
+AS
+    percentage float;
+BEGIN
+    select least(area_covered / f.area, 1)
+    into percentage
+    from forest f
+    where f.forest_no = input_forest_no;
+    return (percentage);
+END;
+/
+--Again, note that the variable declaration has to come before the body of the function/procedure
+
+------------------------------------------------------------------
+--Question 2 Triggers
+------------------------------------------------------------------
+--Q2a)
+
+CREATE OR REPLACE TRIGGER tri_Last_Read
+    AFTER INSERT
+    ON Report
+    FOR EACH ROW
+BEGIN
+    proc_Update_Last_Read(:new.sensor_id, :new.report_time);
+END;
+/
+
+------------------------------
+--Q2b)
+
+CREATE OR REPLACE TRIGGER tri_Percentage
+    BEFORE UPDATE OF area
+    ON coverage
+    FOR EACH ROW
+BEGIN
+    :new.percentage := fun_compute_percentage(:new.forest_no, :new.area);
+END;
+/
+
+----------------------------
+--Q2c)
+
+CREATE OR REPLACE TRIGGER tri_Emergency
+    AFTER INSERT
+    ON REPORT
+    FOR EACH ROW
+    WHEN (new.Temperature > 100)
+BEGIN
+    insert into Emergency values (:new.Sensor_ID, :new.Report_Time);
+END;
+/
+
+------------------------------------------------------------------
+--Question 3 Verify Triggers
+------------------------------------------------------------------
+--Q3a)
+
+select *
+from SENSOR;
+
+insert into REPORT
+VALUES (1, 55, to_timestamp('10-JUN-2019 09:00:00', 'DD-MON-YYYY HH24:MI:SS'));
+
+select *
+from SENSOR;
+
+--Q3b)
+
+select *
+from COVERAGE;
+
+update COVERAGE
+set area=20000
+where FOREST_NO = '1'
+  and STATE = 'PA';
+
+update COVERAGE
+set area=50000
+where FOREST_NO = '1'
+  and STATE = 'OH';
+
+select *
+from COVERAGE;
+
+--Q3c)
+
+select *
+from EMERGENCY;
+
+insert into REPORT
+VALUES (1, 105, to_timestamp('10-JUL-2019 09:00:00', 'DD-MON-YYYY HH24:MI:SS'));
+
+select *
+from EMERGENCY;
+
+commit;
+
+------------------------------------------------------------------
+--Question 4 Cursors
+------------------------------------------------------------------
+
+--Explicit cursor
+CREATE OR REPLACE PROCEDURE forest_names AS
+    CURSOR forest_cursor IS
+        SELECT *
+        FROM forest;
+    forest_record forest%rowtype;
+BEGIN
+    OPEN forest_cursor;
+    LOOP
+        FETCH forest_cursor INTO forest_record;
+        EXIT WHEN forest_cursor%NOTFOUND;
+        dbms_output.put_line(forest_record.name);
+    END LOOP;
+    close forest_cursor;
+END;
+/
+
+begin
+    forest_names();
+end;
+/
+
+--Implicit cursor
+CREATE OR REPLACE PROCEDURE forest_names AS
+    forest_record forest%rowtype;
+BEGIN
+    FOR forest_record in
+        (SELECT * FROM forest)
+        LOOP
+            dbms_output.put_line(forest_record.name);
+        END LOOP;
+END;
+/
+
+begin
+    forest_names();
+end;
+/
